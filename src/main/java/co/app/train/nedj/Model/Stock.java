@@ -93,7 +93,6 @@ public class Stock implements Serializable {
     @Column(name = "markCap")
     private String markCap;
 
-
-
+    private String response;
 
 }

@@ -2,6 +2,7 @@ package co.app.train.nedj.Controller;
 
 import co.app.train.nedj.Exceptions.DataNotFoundException;
 import co.app.train.nedj.Model.Stock;
+import co.app.train.nedj.Model.StockResponse;
 import  co.app.train.nedj.Services.StockService;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class StockController {
 
 
 
-    //====================Find based on ==========================
+    //====================Get based on symbol==========================
     @RequestMapping(value = "/getStock/{symbol}" , method = RequestMethod.GET)
     @ResponseBody
     public String getStock(@PathVariable String symbol) throws IOException {
@@ -35,15 +36,16 @@ public class StockController {
     }
 
 
-
+    //===================Watch stock base on symbol
     @RequestMapping(value = "/watchStock/{symbol}/{name}", method = RequestMethod.POST)
     @ResponseBody
-    public Stock watchStock(@PathVariable String symbol, @PathVariable String name) throws Exception{
+    public StockResponse watchStock(@PathVariable String symbol, @PathVariable String name) throws Exception{
 
 
         return this.stockService.watchStock(symbol, name);
     }
 
+    //==================Get all stocks
     @RequestMapping(value = "/getStocks", method = RequestMethod.GET)
     @ResponseBody
     public List<Stock> getStocks() throws  Exception

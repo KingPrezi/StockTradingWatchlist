@@ -4,17 +4,16 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 //import org.json.simple.parser.JSONParser;
 import co.app.train.nedj.Exceptions.DataNotFoundException;
 import co.app.train.nedj.Model.Stock;
+import co.app.train.nedj.Model.StockResponse;
 import co.app.train.nedj.Repositories.StockRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +24,6 @@ public class StockService {
 
     @Autowired
     private StockRepository stockRepository;
-
-    public static void main(String[] args) {
-
-
-    }
-
 
 
     public String getStock(String symbol) throws IOException {
@@ -50,49 +43,72 @@ public class StockService {
             inputLine = in.readLine();
             dataL = inputLine;
         } catch(MalformedURLException e){
+
             e.getStackTrace();
+
         } catch (DataNotFoundException dnfe){
 
-            dataL = "Stock with symbol " + symbol + " not found";
+            dataL = "No data foundl";
         } catch (FileNotFoundException f){
 
             dataL = "Stock with symbol " + symbol + " not found";
-        } catch(Exception e){
+        } catch (UnknownHostException un){
+
+            dataL = "Please check your internet connection";
+        }
+
+        catch(Exception e){
+
             e.printStackTrace();
         }
 
 
         return dataL;
 
-
     }
 
+    public StockResponse watchStock(String symbol, String name) throws Exception {
 
-    public Stock watchStock(String symbol, String name) throws Exception {
 
-
+        StockResponse stockPersist = new StockResponse(new Stock(), "Stock saved successfully!!");
+   // String dataT = "";
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        URL url = new URL("https://api.iextrading.com/1.0/stock/" + symbol +"/quote?filter=symbol,companyName,sector,open,close,high,low,latestPrice,latestTime,delayedPrice,extendedPrice,lastVolume,change,changePercent,peRatio,marketCap");
+
+
+        try {
+            URL url = new URL("https://api.iextrading.com/1.0/stock/" + symbol + "/quote?filter=symbol,companyName,sector,open,close,high,low,latestPrice,latestTime,delayedPrice,extendedPrice,lastVolume,change,changePercent,peRatio,marketCap");
+
+
+            stockPersist.setStock(objectMapper.readValue(url, Stock.class));
+            stockPersist.getStock().setName(name);
 
 
 
-        Stock stockPersist = objectMapper.readValue(url, Stock.class);
-        stockPersist.setName(name);
+            this.stockRepository.save(stockPersist.getStock());
 
+        }catch (FileNotFoundException fe){
 
+           return new StockResponse("No data found for " + stockPersist.getStock().getSymbol() + " symbol");
 
-        if(stockPersist == null){
+        }catch (DataNotFoundException da){
 
-            throw new Exception("No data found");
+            return new StockResponse("No data found");
+
+        }catch (UnknownHostException un){
+
+            return new StockResponse("Please check your internet connection");
+
+        }catch(Exception e){
+
+            e.printStackTrace();
+
         }
 
 
-        this.stockRepository.save(stockPersist);
 
-        return stockPersist;
-
+    return stockPersist;
     }
 
 
@@ -102,3 +118,6 @@ public class StockService {
         return stockRepository.findAll();
     }
 }
+
+//TODO junit test cases
+//TODO Exception Handling
