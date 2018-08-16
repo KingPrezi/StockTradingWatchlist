@@ -1,4 +1,4 @@
-package co.app.train.nedj.Model;
+package stock.nedj.Model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StockResponse {
-    private Stock stock;
+    private Stock stock; //= new Stock();
     private String response;
 
     public StockResponse(String response){

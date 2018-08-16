@@ -1,4 +1,4 @@
-package co.app.train.nedj;
+package org.nedj;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

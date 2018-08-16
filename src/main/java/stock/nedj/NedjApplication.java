@@ -1,4 +1,4 @@
-package co.app.train.nedj;
+package stock.nedj;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

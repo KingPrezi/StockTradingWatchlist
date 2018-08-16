@@ -1,4 +1,4 @@
-package co.app.train.nedj.Exceptions;
+package stock.nedj.Exceptions;
 
 public class DataNotFoundException extends  RuntimeException{
     private static final long serialVersionUID = 1L;
@@ -7,4 +7,8 @@ public class DataNotFoundException extends  RuntimeException{
     {
         super(message);
     }
+
+
+
+
 }

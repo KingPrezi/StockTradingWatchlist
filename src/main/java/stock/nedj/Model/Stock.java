@@ -1,4 +1,4 @@
-package co.app.train.nedj.Model;
+package stock.nedj.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -19,23 +19,17 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-
 @Entity
 @Table(name = "stock")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@NamedQueries({
-       @NamedQuery(name = "Stock.findBySymbol", query = "SELECT s FROM Stock s WHERE s.symbol = :symbol")})
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Stock implements Serializable {
-    //universal version identifier for a Serializable class
+
     private static final long serialVersionUID = 1L;
-    //indicating the member field below is the primary key of current entity.
-
-
-    //lastVolume,change,changePercent,peRatio,marketCap/
 
     @Id
     @NotNull
@@ -59,8 +53,8 @@ public class Stock implements Serializable {
     @Column(name = "close")
     private String close;
 
-    @Column(name = "pRatio")
-    private String pRatio;
+    @Column(name = "peRatio")
+    private String peRatio;
 
     @Column(name ="high")
     private String high;
@@ -74,25 +68,13 @@ public class Stock implements Serializable {
     @Column(name = "latestTime")
     private String latestTime;
 
-
     @Column(name = "delayedPrice")
     private String delayedPrice;
 
     @Column(name = "extendedPrice")
     private String extendedPrice;
 
-    @Column (name = "lastVolume")
-    private String lastVolume;
-
-    @Column(name = "changes")
-    private String changes;
-
     @Column(name = "changePercent")
     private String changePercent;
-
-    @Column(name = "markCap")
-    private String markCap;
-
-    private String response;
 
 }
