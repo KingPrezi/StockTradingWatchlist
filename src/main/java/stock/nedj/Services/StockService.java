@@ -2,12 +2,9 @@ package stock.nedj.Services;
 
 import java.io.FileNotFoundException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
-import stock.nedj.Exceptions.DataNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import stock.nedj.Model.Response;
 import stock.nedj.Model.Stock;
 import stock.nedj.Model.StockResponse;
@@ -17,13 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-
-
 @Service
 public class StockService {
 
     @Autowired
     private StockRepository stockRepository;
+
+    private static Logger logger = LoggerFactory.getLogger(StockService.class);
 
     ///////////////////////////////URL connection method
     public StockResponse urlConnec(String symbol, String name) {
@@ -32,26 +29,40 @@ public class StockService {
         ObjectMapper objectMapper = new ObjectMapper();
 
 
-        try{
 
-            URL url = new URL("https://api.iextrading.com/1.0/stock/" + symbol + "/quote?" +
-                    "filter=symbol,companyName,sector,open,close,high,low,latestPrice,latestTime,delayedPrice,extendedPrice,lastVolume,change," +
-                    "changePercent,peRatio,marketCap");
+        try {
 
-            stockPersist.setStock(objectMapper.readValue(url, Stock.class));
+            if (name.matches ("^[A-Za-z_-]{3,15}$")) {
 
-            stockPersist.getStock().setName(name);
+            if (symbol.matches("^[A-Za-z_-]{1,6}$")) {
 
+                URL url = new URL("https://api.iextrading.com/1.0/stock/" + symbol + "/quote?" +
+                        "filter=symbol,companyName,sector,open,close,high,low,latestPrice,latestTime,delayedPrice,extendedPrice,lastVolume,change," +
+                        "changePercent,peRatio,marketCap");
 
+                stockPersist.setStock(objectMapper.readValue(url, Stock.class));
 
+                stockPersist.getStock().setName(name);
+            }else {
+                return  new StockResponse("Enter a valid symbol");
+            }
 
-        }catch (FileNotFoundException fi){
+            }else {
+                return  new StockResponse("Enter a valid name");
+            }
+
+        } catch (FileNotFoundException fi) {
             return new StockResponse("Not found");
-        } catch (UnknownHostException b){
-            return  new StockResponse("You are not connected to the internet");
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (UnknownHostException b) {
+            return new StockResponse("You are not connected to the internet");
+        } catch (Exception e) {
+            logger.info("symbol" + symbol);
         }
+
+
+
+
+
 
         return stockPersist;
     }
@@ -74,19 +85,28 @@ public class StockService {
            this.stockRepository.save(stock);
        }
 
-
+ 
        return this.urlConnec(symbol, name);
     }
 
     ////////////////////////Return all Stocks that are in the database
-    public Response getStocks(String name) {
+    public Response<Stock> getStocks(String name){
 
-        Response stoc = new Response("Found symbol ");
+        Response<Stock> stoc = new Response<>(stockRepository.findByName(name),"No stock in the datsbase for the requested name");
 
-        
-           return stockRepository.findByName(name);
-        
+    if (stoc.getStock().isEmpty() ) {
+
+        stoc = new Response<>(stockRepository.findByName(name),"Stock not found");
+
+  }
+  else{
+
+        stoc = new Response<>(stockRepository.findByName(name),"Stock found");
 
     }
-}
 
+    return stoc;
+
+    }
+
+}

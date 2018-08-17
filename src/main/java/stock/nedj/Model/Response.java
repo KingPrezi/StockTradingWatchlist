@@ -14,8 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Response {
-    private List<Stock> stock; //= new Stock();
+public class Response<S> {
+    private List<Stock> stock;
     private String response;
 
     public Response(String response){

@@ -1,12 +1,9 @@
 package stock.nedj.Controller;
 
-import com.sun.org.apache.xerces.internal.xs.StringList;
-import stock.nedj.Exceptions.DataNotFoundException;
+import stock.nedj.Model.Response;
 import stock.nedj.Model.Stock;
 import stock.nedj.Model.StockResponse;
 import stock.nedj.Services.StockService;
-
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +34,7 @@ public class StockController {
 
     //==================Get all stocks
     @RequestMapping(value = "/getStocks/{name}", method = RequestMethod.GET)
-    public List<Stock> getStocks(@PathVariable String name) throws Exception {
+    public Response<Stock> getStocks(@PathVariable String name) throws Exception {
 
 
             return stockService.getStocks(name);
