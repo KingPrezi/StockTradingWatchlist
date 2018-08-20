@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StockResponse {
-    private Stock stock; //= new Stock();
+    private Stock stock;
     private String response;
 
     public StockResponse(String response){

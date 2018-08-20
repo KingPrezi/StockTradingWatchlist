@@ -13,6 +13,3 @@ public interface StockRepository extends JpaRepository<Stock, String> {
     List<Stock> findByName(@Param("name") String name);
 
 }
-
-
-//135 4989 501

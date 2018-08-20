@@ -1,7 +1,6 @@
 package stock.nedj.Controller;
 
 import stock.nedj.Model.Response;
-import stock.nedj.Model.Stock;
 import stock.nedj.Model.StockResponse;
 import stock.nedj.Services.StockService;
 
@@ -17,7 +16,8 @@ public class StockController {
     private StockService stockService;
 
     //====================Get Stock based on symbol==========================
-    @RequestMapping(value = "/getStock/{symbol}/{name}" , method = RequestMethod.GET)
+    //@RequestMapping(value = "/getStock/{symbol}/{name}" , method = RequestMethod.GET)
+    @GetMapping(path = "/getStock/{symbol}/{name}") // Compliant
     public StockResponse getStock(@PathVariable String symbol,@PathVariable String name){
 
         return this.stockService.getStock(symbol,name);
@@ -25,7 +25,8 @@ public class StockController {
     }
 
     //===================Watch stock base on symbol and post to database with username
-    @RequestMapping(value = "/watchStock/{symbol}/{name}", method = RequestMethod.POST)
+    //@RequestMapping(value = "/watchStock/{symbol}/{name}", method = RequestMethod.POST)
+    @PostMapping(path = "/watchStock/{symbol}/{name}") // Compliant
     public StockResponse watchStock(@PathVariable String symbol, @PathVariable String name){
 
         return this.stockService.watchStock(symbol, name);
@@ -33,15 +34,13 @@ public class StockController {
     }
 
     //==================Get all stocks
-    @RequestMapping(value = "/getStocks/{name}", method = RequestMethod.GET)
-    public Response<Stock> getStocks(@PathVariable String name) throws Exception {
+    //@RequestMapping(value = "/getStocks/{name}", method = RequestMethod.GET)
 
+    @GetMapping(path = "/getStocks/{name}") // Compliant
+    public Response getStocks(@PathVariable String name){
 
             return stockService.getStocks(name);
-
 
     }
 
 }
-
-//TODO exception handling

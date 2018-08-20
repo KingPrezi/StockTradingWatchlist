@@ -1,5 +1,8 @@
 package org.nedj;
 
+import com.jayway.restassured.RestAssured;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.test.context.ContextConfiguration;
 import stock.nedj.Controller.StockController;
 import stock.nedj.Services.StockService;
 import org.apache.http.HttpResponse;
@@ -21,24 +24,24 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.*;
 import static com.jayway.restassured.RestAssured.given;
 
-
+@SpringBootConfiguration
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = StockController.class,secure = false)
+//@WebMvcTest(value = StockController.class)
 public class  StockTestTest {
 
 
-    @Autowired
-    private MockMvc mvc;
+  //  @Autowired
+  //  private MockMvc mvc;
 
     @MockBean
     private StockService stockService;
 
 
 
-    @BeforeClass
+  @BeforeClass
     public static void setup() throws IOException {
-
-      /*  String port = System.getProperty("server.port");
+//
+        String port = System.getProperty("server.port");
         if (port == null) {
             RestAssured.port = Integer.valueOf(8080);
         }
@@ -56,19 +59,19 @@ public class  StockTestTest {
         if(baseHost==null){
             baseHost = "http://localhost";
         }
-        RestAssured.baseURI = baseHost;*/
-
-
+        RestAssured.baseURI = baseHost;
+//
+//
     }
-
+//
     @After
     public void verify() throws Exception {
 
     }
 
     @Test
-    public void testGetStockBySymbolOk() throws Exception {
-
+    public void testGetStockBySymbolOk() throws IOException {
+//
         String symbol = "a";
        HttpUriRequest request = new HttpGet("https://api.iextrading.com/1.0/stock/" + symbol + "/quote");
 
@@ -100,6 +103,7 @@ public class  StockTestTest {
         given().when().get("https://api.iextrading.com/1.0/ref-data/symbols").then().statusCode(200);
   }
 
+
  /* @Test
     public void dataPost(){
         Stock stock = new Stock();
@@ -113,7 +117,6 @@ public class  StockTestTest {
                 .body("empty",equalTo(false));
   }
 */
-
 
 
 }

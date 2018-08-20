@@ -56,12 +56,8 @@ public class StockService {
         } catch (UnknownHostException b) {
             return new StockResponse("You are not connected to the internet");
         } catch (Exception e) {
-            logger.info("symbol" + symbol);
+            logger.info(String.format("Symbol %s Name %S", symbol,name));
         }
-
-
-
-
 
 
         return stockPersist;
@@ -90,18 +86,18 @@ public class StockService {
     }
 
     ////////////////////////Return all Stocks that are in the database
-    public Response<Stock> getStocks(String name){
+    public Response getStocks(String name){
 
-        Response<Stock> stoc = new Response<>(stockRepository.findByName(name),"No stock in the datsbase for the requested name");
+        Response stoc = new Response(stockRepository.findByName(name),"No stock in the datsbase for the requested name");
 
     if (stoc.getStock().isEmpty() ) {
 
-        stoc = new Response<>(stockRepository.findByName(name),"Stock not found");
+        stoc = new Response(stockRepository.findByName(name),"Stock not found");
 
   }
   else{
 
-        stoc = new Response<>(stockRepository.findByName(name),"Stock found");
+        stoc = new Response(stockRepository.findByName(name),"Stock found");
 
     }
 
